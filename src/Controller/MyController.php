@@ -10,22 +10,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MyController extends AbstractController
 {
-    #[Route('/my', name: 'app_my')]
-    public function index(): Response
+    #[Route('/my/{name}', defaults:['name' => null],name: 'app_my')]    
+    public function index($name): Response   
     {
         return $this->render('my/index.html.twig', [
-            'controller_name' => 'MyController',
-        ]);
-    }
-    
-    /**
-     * oldMethod
-     *
-     * @Route("/old", name="old")
-     */
-    public function oldMethod(): Response {
-        return $this->render('my/index.html.twig', [
-            'controller_name' => 'MyController',
+            'controller_name' => 'MyController '.$name,
         ]);
     }
 }
