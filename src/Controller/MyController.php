@@ -10,10 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class MyController extends AbstractController
 {
     #[Route('/my/{name}', defaults:['name' => null],name: 'app_my')]    
-    public function index($name): Response   
+    public function index($name): Response 
     {
-        return $this->render('my/index.html.twig', [
-            'controller_name' => 'MyController '.$name,
-        ]);
+        $movies = ["Avenger","Inception","Loki","Black Widow"];
+        return $this->render('index.html.twig', array("movies"=>$movies));
     }
 }
