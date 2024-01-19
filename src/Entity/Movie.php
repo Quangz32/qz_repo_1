@@ -3,11 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\MovieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\UX\Turbo\Attribute\Broadcast;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
-#[Broadcast]
 class Movie
 {
     #[ORM\Id]
@@ -16,51 +16,83 @@ class Movie
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    private ?string $name = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $releaseYear = null;
+    #[ORM\Column]
+    private ?int $year = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $imagePath = null;
+    #[ORM\Column(length: 222, nullable: true)]
+    private ?string $imgPath = null;
+
+    #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'movies')]
+    private Collection $actors;
+
+    public function __construct()
+    {
+        $this->actors = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getName(): ?string
     {
-        return $this->title;
+        return $this->name;
     }
 
-    public function setTitle(string $title): static
+    public function setName(string $name): static
     {
-        $this->title = $title;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getReleaseYear(): ?int
+    public function getYear(): ?int
     {
-        return $this->releaseYear;
+        return $this->year;
     }
 
-    public function setReleaseYear(?int $releaseYear): static
+    public function setYear(int $year): static
     {
-        $this->releaseYear = $releaseYear;
+        $this->year = $year;
 
         return $this;
     }
 
-    public function getImagePath(): ?string
+    public function getImgPath(): ?string
     {
-        return $this->imagePath;
+        return $this->imgPath;
     }
 
-    public function setImagePath(?string $imagePath): static
+    public function setImgPath(?string $imgPath): static
     {
-        $this->imagePath = $imagePath;
+        $this->imgPath = $imgPath;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Actor>
+     */
+    public function getActors(): Collection
+    {
+        return $this->actors;
+    }
+
+    public function addActor(Actor $actor): static
+    {
+        if (!$this->actors->contains($actor)) {
+            $this->actors->add($actor);
+        }
+
+        return $this;
+    }
+
+    public function removeActor(Actor $actor): static
+    {
+        $this->actors->removeElement($actor);
 
         return $this;
     }
